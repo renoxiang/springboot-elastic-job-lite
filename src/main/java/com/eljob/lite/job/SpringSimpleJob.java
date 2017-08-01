@@ -2,33 +2,41 @@ package com.eljob.lite.job;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.eljob.lite.domain.User;
+import com.eljob.lite.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import java.util.Date;
 
 /**
  * Created by xy on 2017/7/14.
  */
 public class SpringSimpleJob implements SimpleJob {
+
+    @Resource
+    private UserService userService;
     public static final Logger logger = LoggerFactory.getLogger(SpringSimpleJob.class);
 
     @Override
     public void execute(ShardingContext shardingContext) {
-        System.out.println("in");
         int parameter = shardingContext.getShardingItem();
+        User user;
         switch (parameter){
+            case 0:
+                user = userService.getById(1L);
+                System.out.println(user.getUsername());
+                break;
             case 1:
-                System.out.println("1");
+                user = userService.getById(2L);
+                System.out.println(user.getUsername());
                 break;
             case 2:
-                System.out.println("2");
-                break;
-            case 3:
-                System.out.println("3");
+                user = userService.getById(3L);
+                System.out.println(user.getUsername());
                 break;
             default:break;
         }
-        System.out.println("out");
     }
 }

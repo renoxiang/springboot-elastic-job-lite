@@ -1,11 +1,12 @@
 regCenter:
-  serverList: 127.0.0.1:2181
+  serverList: 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
   namespace: elastic-job-lite-springboot
   
 simpleJob:
-  cron: 0/5 * * * * ?
-  shardingTotalCount: 3
-  shardingItemParameters: 0=Beijing,1=Shanghai,2=Guangzhou
+  cron: 0/20 * * * * ?
+  shardingTotalCount: 1
+  shardingItemParameters: 1=Beijing,2=Shanghai,3=Guangzhou
+  misfire: false
   
 dataflowJob:
   cron: 0/5 * * * * ?
@@ -13,5 +14,35 @@ dataflowJob:
   shardingItemParameters: 0=Beijing,1=Shanghai,2=Guangzhou
 
 spring:
+
+  # 激活配置文件
   profiles:
-    active: dev
+    active: prod
+
+  # 数据库访问配置
+  datasource:
+    # 下面为连接池的补充设置，应用到上面所有数据源中
+    # 初始化大小，最小，最大
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+    testWhileIdle: true
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    # 定期把监控数据输出到日志中
+    timeBetweenLogStatsMillis: 300000
+    # 用来检测连接是否有效的sql，要求是一个查询语句
+    validationQuery: SELECT 1
+    testOnBorrow: false
+    testOnReturn: false
+
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.logSlowSql=true;druid.stat.slowSqlMillis=5000

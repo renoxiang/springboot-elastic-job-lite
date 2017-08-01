@@ -34,26 +34,26 @@ import javax.annotation.Resource;
 
 @Configuration
 public class SimpleJobConfig {
-    
+
     @Resource
     private ZookeeperRegistryCenter regCenter;
-    
+
     @Resource
     private JobEventConfiguration jobEventConfiguration;
-    
+
     @Bean
     public SimpleJob simpleJob() {
         return new SpringSimpleJob();
     }
-    
+
     @Bean(initMethod = "init")
     public JobScheduler simpleJobScheduler(final SimpleJob simpleJob, @Value("${simpleJob.cron}") final String cron, @Value("${simpleJob.shardingTotalCount}") final int shardingTotalCount,
                                            @Value("${simpleJob.shardingItemParameters}") final String shardingItemParameters) {
         return new SpringJobScheduler(simpleJob, regCenter, getLiteJobConfiguration(simpleJob.getClass(), cron, shardingTotalCount, shardingItemParameters), jobEventConfiguration);
     }
-    
+
     private LiteJobConfiguration getLiteJobConfiguration(final Class<? extends SimpleJob> jobClass, final String cron, final int shardingTotalCount, final String shardingItemParameters) {
         return LiteJobConfiguration.newBuilder(new SimpleJobConfiguration(JobCoreConfiguration.newBuilder(
-                jobClass.getName(), cron, shardingTotalCount).shardingItemParameters(shardingItemParameters).build(), jobClass.getCanonicalName())).overwrite(true).build();
+                jobClass.getName(), cron, shardingTotalCount).shardingItemParameters(shardingItemParameters).misfire(false).build(), jobClass.getCanonicalName())).overwrite(true).build();
     }
 }
