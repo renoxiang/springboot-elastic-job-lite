@@ -1,10 +1,10 @@
 regCenter:
-  serverList: 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
+  serverList: 192.168.199.6:2181
   namespace: elastic-job-lite-springboot
   
 simpleJob:
   cron: 0/20 * * * * ?
-  shardingTotalCount: 1
+  shardingTotalCount: 3
   shardingItemParameters: 1=Beijing,2=Shanghai,3=Guangzhou
   misfire: false
   

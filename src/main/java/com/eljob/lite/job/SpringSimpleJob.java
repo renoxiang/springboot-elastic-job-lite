@@ -26,15 +26,15 @@ public class SpringSimpleJob implements SimpleJob {
         switch (parameter){
             case 0:
                 user = userService.getById(1L);
-                System.out.println(user.getUsername());
+                logger.debug(user.getUsername()+"===============1");
                 break;
             case 1:
                 user = userService.getById(2L);
-                System.out.println(user.getUsername());
+                logger.debug(user.getUsername()+"===============2");
                 break;
             case 2:
                 user = userService.getById(3L);
-                System.out.println(user.getUsername());
+                logger.debug(user.getUsername()+"===============3");
                 break;
             default:break;
         }
